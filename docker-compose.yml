@@ -20,3 +20,7 @@ services:
 
 volumes:
   pgdata:
+  
+  networks:
+  mynetwork:
+    driver: bridge
