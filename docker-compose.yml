@@ -2,7 +2,7 @@
 services:
 
   nestapp:
-    image: lisandro85/ecommerce:latests
+    image: lisandro85/ecommerce:latest
     build: ./
     ports:
       - "3002:3000"
