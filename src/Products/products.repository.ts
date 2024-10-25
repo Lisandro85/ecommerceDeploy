@@ -60,7 +60,7 @@ export class ProductsRepository{
     return plainToInstance(Products,product)
   }
 
-   async seederProduct() {
+  async seederProduct():Promise <string> {
     const promises = data.map(async (element) => {
         const category = await this.categoriesRepository.findOne({where:{name:element.category}});
         const productExist=await this.productsRepository.findOne({
@@ -95,7 +95,7 @@ export class ProductsRepository{
     
 }
 
-  async addProducts(products: CreateProductDto){
+  async addProducts(products: CreateProductDto):Promise <{message:string}>{
     const productExist = await this.productsRepository.findOne({ where:{name:products.name}});
 
     if (productExist) {
@@ -141,6 +141,7 @@ export class ProductsRepository{
       message: `Producto con Id: ${updatedProduct.id} modificado correctamente`
   };
 }
+
   async deleteProduct(id:string):Promise<{message:string}>{
   const product=await this.productsRepository.findOneBy({id})
   if(!product){

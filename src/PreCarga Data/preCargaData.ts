@@ -1,38 +1,30 @@
 import { Injectable, OnModuleInit } from "@nestjs/common";
 import * as data from '../utils/data.json';
-import { Categories } from "src/Categories/categories.entity";
-import { InjectRepository } from "@nestjs/typeorm";
-import { EntityManager, Repository } from "typeorm";
-import { Products } from "src/Products/products.entity";
-
+import { Categories } from "../Categories/categories.entity";
+import { EntityManager} from "typeorm";
+import { Products } from "../Products/products.entity";
 
 
 @Injectable()
 export class PreCarga implements OnModuleInit {
-    categories:Array<string>
-    products:Array<string>
 
-    constructor(
-        @InjectRepository(Categories)
-        private readonly categoriesRepository: Repository<Categories>,
-        @InjectRepository(Products)
-        private readonly productsRepository: Repository<Products>
+    categories: Array<string>;
+    products: Array<string>;
 
-    ) {this.categories=Array.from(new Set(data.map(item=>item.category)))
-        this.products=Array.from(new Set(data.map(item=>item.name)))
+    constructor(private readonly manager: EntityManager) {
+        this.categories = Array.from(new Set(data.map(item => item.category)));
+        this.products = Array.from(new Set(data.map(item => item.name)));
     }
-
     async onModuleInit() {
         await this.loadData();
 
     }
 
     private async loadData() {
-        const connection = this.categoriesRepository.manager.connection;
-        const queryRunner = connection.createQueryRunner();
-
+        const queryRunner = this.manager.connection.createQueryRunner();
         await queryRunner.connect();
         await queryRunner.startTransaction();
+
         try {
             await this.resetProducts(queryRunner.manager);
             await this.resetCategories(queryRunner.manager);
@@ -102,7 +94,7 @@ export class PreCarga implements OnModuleInit {
                 if(productExist){
                     if (productExist.ordersDetails.length===0) {
         
-                        await this.productsRepository.delete(productExist.id)
+                        await manager.delete(Products,productExist.id)
                         
                     }else{
                         console.log(`El producto  ${element}, esta asociado a una o mas ordenes, no se puede eliminar `)
@@ -114,6 +106,7 @@ export class PreCarga implements OnModuleInit {
         await Promise.all(promise);
         
     }
+
     private async addProducts(manager:EntityManager) {
         let productsAdded = 0; 
 
