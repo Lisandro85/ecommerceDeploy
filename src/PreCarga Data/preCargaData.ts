@@ -2,8 +2,9 @@ import { Injectable, OnModuleInit } from "@nestjs/common";
 import * as data from '../utils/data.json';
 import { Categories } from "src/Categories/categories.entity";
 import { InjectRepository } from "@nestjs/typeorm";
-import { Repository } from "typeorm";
+import { EntityManager, Repository } from "typeorm";
 import { Products } from "src/Products/products.entity";
+
 
 
 @Injectable()
@@ -23,6 +24,7 @@ export class PreCarga implements OnModuleInit {
 
     async onModuleInit() {
         await this.loadData();
+
     }
 
     private async loadData() {
@@ -32,33 +34,32 @@ export class PreCarga implements OnModuleInit {
         await queryRunner.connect();
         await queryRunner.startTransaction();
         try {
-            await this.resetProducts();
-            await this.resetCategories();
-            await this.addCategories(); 
-            await this.addProducts();    
+            await this.resetProducts(queryRunner.manager);
+            await this.resetCategories(queryRunner.manager);
+            await this.addCategories(queryRunner.manager); 
+            await this.addProducts(queryRunner.manager);    
             await queryRunner.commitTransaction();
 
         } catch (error) {
             await queryRunner.rollbackTransaction();
-            console.error("Error al cargar datos:", error);
+            console.error("Error en la pregarga de datos:", error);
         } finally {
             await queryRunner.release();
         }
     }
 
-    private async resetCategories(){
+    private async resetCategories(manager: EntityManager){
         console.log("Reseteando categorias...")
         const promise=this.categories.map(async(element)=>{
-            const categoryExist= await this.categoriesRepository.findOne({
+            const categoryExist= await manager.findOne(Categories,{
                 where:{name:element},
                 relations:{products:true}
             })
             if(categoryExist){
                 if (categoryExist.products.length===0) {
-                    await this.categoriesRepository.delete(categoryExist.id)
+                    await manager.delete(Categories,categoryExist.id)
             }else {
-                console.log(`Categoria con nombre ${element} 
-                    asociada a un producto, no se puede eliminar `)
+                console.log(`La categoria ${element}, esta asociada a uno o mas productos, no se puede eliminar `)
             }  
             }
   
@@ -67,14 +68,14 @@ export class PreCarga implements OnModuleInit {
         await Promise.all(promise);
     }; 
 
-    private async addCategories() {
+    private async addCategories(manager:EntityManager) {
         let categoriesAdded = 0; 
         const promises = this.categories.map(async (element) => {
-            const categoryExist=await this.categoriesRepository.findOne({where:{name:element}})
+            const categoryExist=await manager.findOne(Categories,{where:{name:element}})
 
             if (!categoryExist) {
 
-                await this.categoriesRepository
+                await manager
                     .createQueryBuilder()
                     .insert()
                     .into(Categories)
@@ -91,10 +92,10 @@ export class PreCarga implements OnModuleInit {
         }; 
     }
 
-    private async resetProducts(){
+    private async resetProducts(manager:EntityManager){
         console.log("Reseteando productos...")
         const promise= this.products.map(async(element)=>{
-            const productExist= await this.productsRepository.findOne({
+            const productExist= await manager.findOne(Products,{
                 where:{name:element},
                 relations:{ordersDetails:true}
             })
@@ -104,8 +105,7 @@ export class PreCarga implements OnModuleInit {
                         await this.productsRepository.delete(productExist.id)
                         
                     }else{
-                        console.log(`Producto con nombre ${element} 
-                            asociada a un orden, no se puede eliminar `)
+                        console.log(`El producto  ${element}, esta asociado a una o mas ordenes, no se puede eliminar `)
                     }  
                 }
              
@@ -114,12 +114,12 @@ export class PreCarga implements OnModuleInit {
         await Promise.all(promise);
         
     }
-    private async addProducts() {
+    private async addProducts(manager:EntityManager) {
         let productsAdded = 0; 
 
         const promises = data.map(async (element) => {
-            const category = await this.categoriesRepository.findOne({where:{name:element.category}});
-            const productExist=await this.productsRepository.findOne({
+            const category = await manager.findOne(Categories,{where:{name:element.category}});
+            const productExist=await manager.findOne(Products,{
                 where:{name:element.name}
             })
       
@@ -132,16 +132,15 @@ export class PreCarga implements OnModuleInit {
                         product.stock = element.stock;
                         product.category = category;
         
-                        await this.productsRepository
+                        await manager
                             .createQueryBuilder()
                             .insert()
                             .into(Products)
                             .values(product)
                             .orIgnore()
-                            .execute();
-                        
+                            .execute()
                         productsAdded++; 
-                }else { console.log(`ya existe el producto: ${element.name}`)}
+                }
            
         });
 

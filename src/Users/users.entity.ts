@@ -13,7 +13,7 @@ export class Users{
     @PrimaryGeneratedColumn('uuid')
     id:string;
 
-    @ApiHideProperty()
+
     @ApiProperty({
         description:`Asignada por default como "user", para respetar roles`,
         default:""

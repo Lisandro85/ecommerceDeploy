@@ -61,7 +61,6 @@ export class ProductsRepository{
   }
 
    async seederProduct() {
-
     const promises = data.map(async (element) => {
         const category = await this.categoriesRepository.findOne({where:{name:element.category}});
         const productExist=await this.productsRepository.findOne({

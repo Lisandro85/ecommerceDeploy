@@ -1,13 +1,13 @@
+version: '3.8'
 
 services:
 
   nestapp:
-    image: lisandro85/ecommerce:latest
     build: ./
     ports:
-      - "3002:3000"
+      - "3001:3000"
     env_file:
-      - ./.env
+      - .env
     depends_on:
       - postgresdb    
 
@@ -16,11 +16,7 @@ services:
     volumes:
       - pgdata:/var/lib/postgresql/data
     env_file:
-      - ./.env
+      - .env 
 
 volumes:
   pgdata:
-  
-  networks:
-  mynetwork:
-    driver: bridge
