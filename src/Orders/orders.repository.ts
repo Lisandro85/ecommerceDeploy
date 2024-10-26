@@ -34,8 +34,17 @@ export class OrdersRepository{
 
         const newOrder=await this.ordersRepository.save(order)
 
+        const productIds = new Set()
         const productsArray= await Promise.all(
             products.map(async (element)=>{
+                
+                if (productIds.has(element.id)) {
+                    throw new BadRequestException(`El producto con id ${element.id} ya está en el carrito!`);
+                }
+
+                productIds.add(element.id);
+                
+                
                 if (!isUUID(element.id)) {
                     throw new BadRequestException(`El id ${element.id} no tiene un formato válido de UUID`);
                 }
@@ -47,6 +56,7 @@ export class OrdersRepository{
                 if (!product){
                     throw new NotFoundException(`Producto con id ${element.id} no existente`) 
                 }
+
 
                 if(product.stock===0){
                     throw new NotFoundException(`No hay stock de producto con id ${element.id}`);
@@ -81,6 +91,20 @@ export class OrdersRepository{
             relations:{
                 orderDetails:{
                     products:true
+                }
+            },
+            select:{
+                id:true,
+                date:true,
+                orderDetails:{
+                    id:true,
+                    price:true,
+                    products:{
+                        id:true,
+                        name:true,
+                        description:true,
+                        price:true
+                    }
                 }
             }
         })

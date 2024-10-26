@@ -1,7 +1,7 @@
 import { BadRequestException, Injectable, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Products } from "./products.entity";
-import { Repository } from "typeorm";
+import { MoreThan, Repository } from "typeorm";
 import { Categories } from "../Categories/categories.entity";
 import * as data from '../utils/data.json'
 import { plainToInstance } from "class-transformer";
@@ -24,6 +24,7 @@ export class ProductsRepository{
  
   async getProducts(page:number, limit: number):Promise<Products[]>{
     let  products=await this.productsRepository.find({
+      where:{stock:MoreThan(0)},
       select: {
         id: true,
         name: true,
@@ -60,7 +61,7 @@ export class ProductsRepository{
     return plainToInstance(Products,product)
   }
 
-  async seederProduct():Promise <string> {
+   async seederProduct() {
     const promises = data.map(async (element) => {
         const category = await this.categoriesRepository.findOne({where:{name:element.category}});
         const productExist=await this.productsRepository.findOne({
@@ -95,7 +96,7 @@ export class ProductsRepository{
     
 }
 
-  async addProducts(products: CreateProductDto):Promise <{message:string}>{
+  async addProducts(products: CreateProductDto){
     const productExist = await this.productsRepository.findOne({ where:{name:products.name}});
 
     if (productExist) {
@@ -123,7 +124,7 @@ export class ProductsRepository{
     product.category = categoryExist;
 
     await this.productsRepository.save(product);
-    return {message:`Producto: ${product.name},agregado correctamente`}
+    return {message:`Producto con id: ${product.id},agregado correctamente`}
   }
 
   async updateProduct(id: string, product: Partial<Products>): Promise<{ message: string}> {
@@ -141,7 +142,6 @@ export class ProductsRepository{
       message: `Producto con Id: ${updatedProduct.id} modificado correctamente`
   };
 }
-
   async deleteProduct(id:string):Promise<{message:string}>{
   const product=await this.productsRepository.findOneBy({id})
   if(!product){
