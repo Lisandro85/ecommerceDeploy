@@ -24,5 +24,4 @@ export class OrdersController{
         return this.ordersService.getOrder(id)
     }
 
-
 }

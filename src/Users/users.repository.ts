@@ -14,6 +14,7 @@ export class UsersRepository{
     async addUser(user:Partial<Users>):Promise<Partial<Users>>{
         const newUser=await this.usersRepository.save(user)
         const dbUser=await this.usersRepository.findOneBy({id:newUser.id})
+        
         const {createdAt,updateAt,password,...userNopassword}=dbUser
         return  userNopassword
     }

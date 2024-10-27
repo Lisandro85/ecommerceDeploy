@@ -11,7 +11,7 @@ export class CategoriesRepository{
 
     constructor (
         @InjectRepository(Categories)
-        private readonly categoriesRepository:Repository<Categories> //Repository {Users, Products..Categories}
+        private readonly categoriesRepository:Repository<Categories> 
     ){this.categories=Array.from(new Set(data.map(item=>item.category)))}
 
         async seederCategories() {

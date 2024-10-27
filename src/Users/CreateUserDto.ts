@@ -1,18 +1,14 @@
 
-import { IsEmail, IsEmpty, IsNotEmpty, IsNumber, IsString, IsStrongPassword, MaxLength, MinLength, Validate } from "class-validator";
+import { IsEmail, IsEmpty, IsNotEmpty, IsNumber, IsString, IsStrongPassword, Matches, MaxLength, MinLength, Validate } from "class-validator";
 import { ValidatePassword } from "../decorators/validatePswDecorator";
 import { ApiHideProperty, ApiProperty } from "@nestjs/swagger";
 
 export class CreateUserDto{
     @IsEmpty()
     @ApiHideProperty()
-    @ApiProperty({
-        description:`Asignada por default como "user", para respetar roles`,
-        default:""
-    })
     isAdmin?:boolean
     
-    
+    @Matches(/^[A-Za-z\s]+$/, { message: 'El nombre no debe contener números ni caracteres especiales' })
     @IsNotEmpty()
     @IsString()
     @MinLength(3)
@@ -72,10 +68,11 @@ export class CreateUserDto{
     @IsNumber()
     @ApiProperty({
         description:`El telefono del Usuario no debe estar vacio, debe ser un numero valido`,
-        example: '555555'
+        example: 555555
     })
     phone:number
 
+    @Matches(/^[A-Za-z\s]+$/, { message: 'El pais no debe contener números ni caracteres especiales' })
     @IsNotEmpty()
     @IsString()
     @MinLength(5)
@@ -87,6 +84,7 @@ export class CreateUserDto{
     })
     country:string
 
+    @Matches(/^[A-Za-z\s]+$/, { message: 'La ciudad no debe contener números ni caracteres especiales' })
     @IsNotEmpty()
     @IsString()
     @MinLength(5)

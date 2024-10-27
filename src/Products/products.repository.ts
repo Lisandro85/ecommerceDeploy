@@ -87,6 +87,8 @@ export class ProductsRepository{
                         .orIgnore()
                         .execute();
                   
+            }else{
+              throw new BadRequestException('Categorias inexistentes, primero cargue las categorias desde el seeder')
             }
        
     });

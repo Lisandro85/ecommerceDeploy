@@ -1,4 +1,4 @@
-import { Body, Controller,Delete,Get, Param, ParseUUIDPipe, Post, Put, Query, UseGuards,} from "@nestjs/common";
+import { Body, Controller,Delete,Get, Param, ParseUUIDPipe, Post, Put, Query, UseGuards, UseInterceptors,} from "@nestjs/common";
 import { ProductsService } from "./products.service";
 import { CreateProductDto } from "./CreateProductDto";
 import { AuthGuard } from "../Guards/auth.guard";
@@ -6,6 +6,7 @@ import { RolesDecorator } from "../decorators/rolesDecorator";
 import { RolesGuard } from "../Guards/roles.Guard";
 import { Role } from "../Auths/rolesEnum";
 import { ApiBearerAuth, ApiQuery, ApiTags } from "@nestjs/swagger";
+import { ValidatorInterceptor } from "src/interceptors/validation.interceptor";
 
 @ApiTags('products')
 @Controller('products')
@@ -36,7 +37,7 @@ export class ProductsController{
      seederProduct() {
         return this.productsService.seederProduct();
     }
-
+    @UseInterceptors(ValidatorInterceptor)
     @Post()
     addProducts(@Body() products:CreateProductDto){
         return this.productsService.addProducts(products)

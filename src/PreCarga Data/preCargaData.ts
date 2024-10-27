@@ -26,6 +26,7 @@ export class PreCarga implements OnModuleInit {
         await queryRunner.startTransaction();
 
         try {
+            
             await this.resetProducts(queryRunner.manager);
             await this.resetCategories(queryRunner.manager);
             await this.addCategories(queryRunner.manager); 

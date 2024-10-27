@@ -13,11 +13,7 @@ export class Users{
     @PrimaryGeneratedColumn('uuid')
     id:string;
 
-
-    @ApiProperty({
-        description:`Asignada por default como "user", para respetar roles`,
-        default:""
-    })
+    @ApiHideProperty()
     @Column({default:false})
     isAdmin:boolean
     
@@ -61,7 +57,7 @@ export class Users{
     country:string;
 
     @ApiProperty({
-        description:`La dicrección del Usuario no puede estar vacia, debe contener un minimo de 
+        description:`La dirección del Usuario no puede estar vacia, debe contener un minimo de 
         3 caracteres y un maximo de 80`,
         example: 'Calle Falsa 123'
     })
