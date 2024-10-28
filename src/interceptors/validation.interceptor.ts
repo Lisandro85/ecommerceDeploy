@@ -2,8 +2,8 @@ import { BadRequestException, CallHandler, ExecutionContext, Injectable, NestInt
 import { plainToClass } from "class-transformer";
 import { validate } from "class-validator";
 import { Observable } from "rxjs";
-import { CreateProductDto } from "src/Products/CreateProductDto";
-import { CreateUserDto } from "src/Users/CreateUserDto";
+import { CreateProductDto } from "../Products/CreateProductDto";
+import { CreateUserDto } from "../Users/CreateUserDto";
 
 
 @Injectable()

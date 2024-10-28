@@ -54,9 +54,8 @@ export class UsersRepository{
             throw new NotFoundException(`Usuario con id ${id} no encontrado`);
         }   
         await this.usersRepository.update(id,user)
-        const {password,isAdmin,...userNopassword}=userExist
         return {
-            message:`Usuario con id:${userNopassword.id}  modificado con exito`,
+            message:`Usuario con id:${id}  modificado con exito`,
         };
     }
 
@@ -66,7 +65,6 @@ export class UsersRepository{
             throw new NotFoundException(`Usuario con id: ${id} inexistente`)
         }
         this.usersRepository.remove(userExist)
-        const {password,isAdmin,...userNopassword}=userExist
          return {message:`Usuario con id: ${id} eliminado correctamente`, }
 
     }

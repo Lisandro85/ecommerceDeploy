@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable, NotFoundException } from "@nestjs/common";
+import { BadRequestException, HttpException, Injectable, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Products } from "./products.entity";
 import { MoreThan, Repository } from "typeorm";
@@ -98,18 +98,18 @@ export class ProductsRepository{
     
 }
 
-  async addProducts(products: CreateProductDto){
+  async addProducts(products: CreateProductDto):Promise<{message:string}>{
     const productExist = await this.productsRepository.findOne({ where:{name:products.name}});
 
     if (productExist) {
       throw new BadRequestException(`El producto ${products.name} ya existe`);
     }
     
-    if (!validateUUID(products.categoryId)) {
+    if (!validateUUID(products.category)) {
       throw new BadRequestException('categoryId debe ser un UUID válido');
   }
     const categoryExist = await this.categoriesRepository.findOne({
-      where: { id: products.categoryId}
+      where: { id: products.category}
     });
    
     if(!categoryExist){
@@ -129,7 +129,7 @@ export class ProductsRepository{
     return {message:`Producto con id: ${product.id},agregado correctamente`}
   }
 
-  async updateProduct(id: string, product: Partial<Products>): Promise<{ message: string}> {
+  async updateProduct(id: string, product: CreateProductDto): Promise<{ message: string}> {
 
   const productExist = await this.productsRepository.findOne({ where: { id } });
 
@@ -137,7 +137,11 @@ export class ProductsRepository{
       throw new NotFoundException(`Producto con id ${id} inexistente`);
   }
 
-  await this.productsRepository.update(id, product);
+  const categoryFound =await this.categoriesRepository.findOne({where: {id:product.category}});
+        if(!categoryFound) 
+            throw new HttpException({status:404,error:"Categoria no encontrada."},404);
+
+  await this.productsRepository.update(id, {...product,category:categoryFound});
   const updatedProduct = await this.productsRepository.findOne({ where: { id } });
   
   return {

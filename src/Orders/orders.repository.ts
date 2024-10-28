@@ -1,7 +1,7 @@
-import { BadRequestException, Injectable, NotFoundException } from "@nestjs/common";
+import { BadRequestException, HttpException, Injectable, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Orders } from "./orders.entity";
-import { Repository } from "typeorm";
+import { EntityManager, Repository } from "typeorm";
 import { OrdersDetails } from "../Orders _Details/ordersDetails.entity";
 import { Users } from "../Users/users.entity";
 import { Products } from "../Products/products.entity";
@@ -14,30 +14,25 @@ export class OrdersRepository{
     constructor(
         @InjectRepository (Orders)
         private readonly ordersRepository:Repository<Orders>,
-        @InjectRepository (OrdersDetails)
-        private readonly ordersDetailsRepository:Repository<OrdersDetails>,
-        @InjectRepository (Users)
-        private readonly usersRepository:Repository<Users>,
-        @InjectRepository (Products)
-        private readonly productsRepository:Repository<Products>
+        private readonly entityManager:EntityManager
     ){}
+
 
     async addOreder(userId:string,products:any){
         let total=0;
-        const user=await this.usersRepository.findOneBy({id:userId})
+        const queryRunner= this.entityManager.connection.createQueryRunner()
+        await queryRunner.connect()
+        await queryRunner.startTransaction()
+        try {
+            const user=await queryRunner.manager.findOneBy(Users,{id:userId})
+
         if (!user){
             throw new NotFoundException(`Usuario con id: ${userId} no encontrado`)
         } 
 
-        const order= new Orders()
-        order.date=new Date()
-        order.user=user
-
-        const newOrder=await this.ordersRepository.save(order)
-
         const productIds = new Set()
-        const productsArray= await Promise.all(
-            products.map(async (element)=>{
+        const productsArray= []
+                for(const element of products){
                 
                 if (productIds.has(element.id)) {
                     throw new BadRequestException(`El producto con id ${element.id} ya está en el carrito!`);
@@ -49,7 +44,7 @@ export class OrdersRepository{
                 if (!isUUID(element.id)) {
                     throw new BadRequestException(`El id ${element.id} no tiene un formato válido de UUID`);
                 }
-                const product=await this.productsRepository.findOneBy({
+                const product=await queryRunner.manager.findOneBy(Products,{
                     id:element.id
                 });
 
@@ -64,25 +59,38 @@ export class OrdersRepository{
                 }
 
                 total+=Number(product.price)
-                await this.productsRepository.update({id:element.id},{stock:product.stock-1})
-                return product;
-            })
-        )
+                await queryRunner.manager.update(Products,{id:element.id},{stock:product.stock-1})
+                productsArray.push(product)
+            }
+            
+        const order = queryRunner.manager.create(Orders,{ date: new Date(), user });
+        const newOrder = await queryRunner.manager.save(Orders,order);
 
         const orderDetails=new OrdersDetails()
         orderDetails.price=Number(Number(total).toFixed(2))
         orderDetails.products=productsArray
         orderDetails.order=newOrder
-        await this.ordersDetailsRepository.save(orderDetails);
+        await queryRunner.manager.save(OrdersDetails,orderDetails);
 
-         const result= await this.ordersRepository.find({
+         const result= await queryRunner.manager.find(Orders,{
             where: {id: newOrder.id},
             relations:{orderDetails:true}
         })
+        await queryRunner.commitTransaction();
         return {
             message:"Pedido creado con exito",
             order: instanceToPlain(result)
         }
+        } catch (error) {
+
+            await queryRunner.rollbackTransaction();
+            throw new HttpException({status:error.response.statusCode, error:error.response.message},error.response.statusCode);
+            
+        }
+        finally{
+            await queryRunner.release()
+        }
+            
     }
 
     async getOrder(id:string):Promise<Partial<Orders>>{

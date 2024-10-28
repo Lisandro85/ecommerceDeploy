@@ -6,6 +6,7 @@ import { Role } from "../Auths/rolesEnum";
 import { RolesGuard } from "../Guards/roles.Guard";
 import { ApiBearerAuth, ApiQuery, ApiTags } from "@nestjs/swagger";
 import { UpdateUserDto } from "./UpdateUserDto";
+import { CreateUserDto } from "./CreateUserDto";
 
 
 @ApiTags('users')
@@ -23,7 +24,7 @@ export class UsersController{
         name:'page',
         required:false,
         type:String,
-        description:'Numeor de pagina'
+        description:'Numero de pagina'
     })
     @ApiQuery({
         name:'limit',

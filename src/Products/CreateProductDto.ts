@@ -50,6 +50,6 @@ export class CreateProductDto{
         description: 'ID de la categoría a la que pertenece el producto',
         example: 'ID_DE_LA_CATEGORÍA_EXISTENTE'
     })
-    categoryId:string
+    category:string
 
 }

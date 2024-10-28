@@ -3,6 +3,9 @@ import { FileInterceptor } from "@nestjs/platform-express";
 import { FileUploadService } from "./fileUploadService";
 import { AuthGuard } from "../Guards/auth.guard";
 import { ApiBearerAuth, ApiBody, ApiConsumes, ApiOperation, ApiParam, ApiTags } from "@nestjs/swagger";
+import { RolesDecorator } from "src/decorators/rolesDecorator";
+import { Role } from "src/Auths/rolesEnum";
+import { RolesGuard } from "src/Guards/roles.Guard";
 
 @ApiTags('files')
 @Controller('files')
@@ -12,7 +15,8 @@ export class FileUploadController{
     ){}
     
     @ApiBearerAuth()
-    @UseGuards(AuthGuard)
+    @RolesDecorator(Role.Admin)
+    @UseGuards(AuthGuard,RolesGuard)
     @Put('uploadimage/:id')
     @ApiOperation({summary:'Cargar imagen para un producto'})
     @ApiParam({name:'id',description:'id del producto',type:String})

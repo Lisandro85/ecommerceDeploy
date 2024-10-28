@@ -6,7 +6,7 @@ import { RolesDecorator } from "../decorators/rolesDecorator";
 import { RolesGuard } from "../Guards/roles.Guard";
 import { Role } from "../Auths/rolesEnum";
 import { ApiBearerAuth, ApiQuery, ApiTags } from "@nestjs/swagger";
-import { ValidatorInterceptor } from "src/interceptors/validation.interceptor";
+import { ValidatorInterceptor } from "../interceptors/validation.interceptor";
 
 @ApiTags('products')
 @Controller('products')

@@ -27,7 +27,7 @@ export class ProductsService{
         return this.productRepository.seederProduct(); 
     }
 
-    updateProduct(id: string, product:Partial<Products>) {
+    updateProduct(id: string, product:CreateProductDto) {
         return this.productRepository.updateProduct(id,product);
     }
     deleteProduct(id:string){

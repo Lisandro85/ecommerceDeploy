@@ -3,7 +3,7 @@ import { AuthService, } from "./auth.service";
 import { LoginUserDto } from "./LoginUserDto";
 import { CreateUserDto } from "../Users/CreateUserDto";
 import { ApiTags } from "@nestjs/swagger";
-import { ValidatorInterceptor } from "src/interceptors/validation.interceptor";
+import { ValidatorInterceptor } from "../interceptors/validation.interceptor";
 
 
 @ApiTags('auth')
