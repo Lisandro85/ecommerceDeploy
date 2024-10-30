@@ -1,4 +1,4 @@
-import { BadGatewayException, BadRequestException, Injectable } from "@nestjs/common";
+import {  BadRequestException, Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Categories } from "./categories.entity";
 import { Repository } from "typeorm";
@@ -14,7 +14,7 @@ export class CategoriesRepository{
         private readonly categoriesRepository:Repository<Categories> 
     ){this.categories=Array.from(new Set(data.map(item=>item.category)))}
 
-    async seederCategories() {
+    async seederCategories():Promise<{message:string}> {
 
         const promises = this.categories.map(async (element) => {
             const categoryExist=await this.categoriesRepository.findOne({where:{name:element}})
@@ -33,10 +33,10 @@ export class CategoriesRepository{
         });
 
         await Promise.all(promises);
-        return "Categorias agregadas con exito"
+        return {message:"Categorias agregadas con exito"}
     }
 
-    async getCategories() {
+    async getCategories():Promise<Categories[]> {
         return this.categoriesRepository.find({
             select:{
                 id:true,
@@ -47,7 +47,7 @@ export class CategoriesRepository{
 
     async addCategories(categories:Partial<Categories>):Promise<{message:string}>{
         const categoriesExist= await this.categoriesRepository.findOne({where:{name:categories.name}})
-        console.log(categoriesExist)
+
         if(categoriesExist){
             throw new BadRequestException(`Ya existe la categoria con el nombre: ${categories.name}`)
         }

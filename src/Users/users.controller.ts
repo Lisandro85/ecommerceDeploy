@@ -58,6 +58,10 @@ export class UsersController{
     deleteUser(@Param('id',  ParseUUIDPipe) id:string){
         return this.usersService.deleteUser(id)
     }
+    
 
-}
+
+}   
+    
+ 
 

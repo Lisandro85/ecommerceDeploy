@@ -13,14 +13,12 @@ import { validate as validateUUID } from 'uuid';
 @Injectable()
 export class ProductsRepository{
   categories:Array<string>
-  products:Array<string>
   constructor(
     @InjectRepository (Products)
     private readonly productsRepository:Repository<Products>,
     @InjectRepository (Categories)
     private readonly categoriesRepository:Repository<Categories>
-  ){this.categories=Array.from(new Set(data.map(item=>item.category)))
-    this.products=Array.from(new Set(data.map(item=>item.name)))}
+  ){this.categories=Array.from(new Set(data.map(item=>item.category)))}
  
   async getProducts(page:number, limit: number):Promise<Products[]>{
     let  products=await this.productsRepository.find({
@@ -61,7 +59,7 @@ export class ProductsRepository{
     return plainToInstance(Products,product)
   }
 
-   async seederProduct() {
+  async seederProduct():Promise <{message:string}> {
     const promises = data.map(async (element) => {
         const category = await this.categoriesRepository.findOne({where:{name:element.category}});
         const productExist=await this.productsRepository.findOne({
@@ -94,7 +92,7 @@ export class ProductsRepository{
     });
 
     await Promise.all(promises);
-    return ("Productos cargados con exito")
+    return ({message:"Productos cargados con exito"})
     
 }
 
@@ -148,6 +146,7 @@ export class ProductsRepository{
       message: `Producto con Id: ${updatedProduct.id} modificado correctamente`
   };
 }
+
   async deleteProduct(id:string):Promise<{message:string}>{
   const product=await this.productsRepository.findOneBy({id})
   if(!product){

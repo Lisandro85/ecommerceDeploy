@@ -4,6 +4,7 @@ import { Column, CreateDateColumn, Entity, JoinColumn, OneToMany, PrimaryGenerat
 import { ApiHideProperty, ApiProperty } from "@nestjs/swagger";
 
 
+
 @Entity({name:'users'})
 export class Users{
 
@@ -13,6 +14,7 @@ export class Users{
     @PrimaryGeneratedColumn('uuid')
     id:string;
 
+   
     @ApiHideProperty()
     @Column({default:false})
     isAdmin:boolean

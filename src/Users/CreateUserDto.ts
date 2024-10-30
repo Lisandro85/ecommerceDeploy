@@ -8,7 +8,7 @@ export class CreateUserDto{
     @ApiHideProperty()
     isAdmin?:boolean
     
-    @Matches(/^[A-Za-z\s]+$/, { message: 'El nombre no debe contener números ni caracteres especiales' })
+   
     @IsNotEmpty()
     @IsString()
     @MinLength(3)
@@ -72,7 +72,7 @@ export class CreateUserDto{
     })
     phone:number
 
-    @Matches(/^[A-Za-z\s]+$/, { message: 'El pais no debe contener números ni caracteres especiales' })
+    
     @IsNotEmpty()
     @IsString()
     @MinLength(5)
@@ -84,7 +84,6 @@ export class CreateUserDto{
     })
     country:string
 
-    @Matches(/^[A-Za-z\s]+$/, { message: 'La ciudad no debe contener números ni caracteres especiales' })
     @IsNotEmpty()
     @IsString()
     @MinLength(5)

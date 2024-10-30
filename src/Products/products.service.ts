@@ -15,9 +15,11 @@ export class ProductsService{
     getProducts( page:number,limit:number){
         return this.productRepository.getProducts(page,limit)
     }
+    
     getProductById(id: string) {
         return this.productRepository.getProductById(id)
     }
+
     addProducts(products:CreateProductDto){
         return this.productRepository.addProducts(products)
 
@@ -30,6 +32,7 @@ export class ProductsService{
     updateProduct(id: string, product:CreateProductDto) {
         return this.productRepository.updateProduct(id,product);
     }
+
     deleteProduct(id:string){
         return this.productRepository.deleteProduct(id)
     }

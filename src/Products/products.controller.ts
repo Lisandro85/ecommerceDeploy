@@ -45,6 +45,7 @@ export class ProductsController{
     }
 
     @ApiBearerAuth()
+    @UseInterceptors(ValidatorInterceptor)
     @RolesDecorator(Role.Admin)
     @UseGuards(AuthGuard,RolesGuard)
     @Put(':id')

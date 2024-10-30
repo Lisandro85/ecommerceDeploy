@@ -5,6 +5,7 @@ import { Users } from "./users.entity";
 @Injectable()
 export class UsersService{
 
+
     constructor(private usersRepository:UsersRepository){}
 
      getUsers(page:number,limit:number){
@@ -20,5 +21,6 @@ export class UsersService{
     deleteUser(id:string){
         return this.usersRepository.deleteUser(id)
     }
+
 
 }

@@ -5,15 +5,14 @@ import { EntityManager} from "typeorm";
 import { Products } from "../Products/products.entity";
 
 
+
 @Injectable()
 export class PreCarga implements OnModuleInit {
 
     categories: Array<string>;
-    products: Array<string>;
 
     constructor(private readonly manager: EntityManager) {
         this.categories = Array.from(new Set(data.map(item => item.category)));
-        this.products = Array.from(new Set(data.map(item => item.name)));
     }
     async onModuleInit() {
         await this.loadData();
@@ -62,7 +61,7 @@ export class PreCarga implements OnModuleInit {
     }; 
 
     private async addCategories(manager:EntityManager) {
-        let categoriesAdded = 0; 
+        let categoriesAdded = 0;
         const promises = this.categories.map(async (element) => {
             const categoryExist=await manager.findOne(Categories,{where:{name:element}})
 
@@ -87,9 +86,9 @@ export class PreCarga implements OnModuleInit {
 
     private async resetProducts(manager:EntityManager){
         console.log("Reseteando productos...")
-        const promise= this.products.map(async(element)=>{
+        const promise= data.map(async(element)=>{
             const productExist= await manager.findOne(Products,{
-                where:{name:element},
+                where:{name:element.name},
                 relations:{ordersDetails:true}
             })
                 if(productExist){
@@ -98,7 +97,7 @@ export class PreCarga implements OnModuleInit {
                         await manager.delete(Products,productExist.id)
                         
                     }else{
-                        console.log(`El producto  ${element}, esta asociado a una o mas ordenes, no se puede eliminar `)
+                        console.log(`El producto  ${element.name}, esta asociado a una o mas ordenes, no se puede eliminar `)
                     }  
                 }
              

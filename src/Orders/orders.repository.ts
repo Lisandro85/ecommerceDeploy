@@ -18,7 +18,7 @@ export class OrdersRepository{
     ){}
 
 
-    async addOreder(userId:string,products:any){
+    async addOreder(userId:string,products:any):Promise<{message:string,order: any}>{
         let total=0;
         const queryRunner= this.entityManager.connection.createQueryRunner()
         await queryRunner.connect()

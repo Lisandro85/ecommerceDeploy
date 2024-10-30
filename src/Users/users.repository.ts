@@ -1,4 +1,4 @@
-import { Injectable,NotFoundException } from "@nestjs/common";
+import { BadGatewayException, Injectable,NotFoundException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Users } from "./users.entity";
 import { Repository } from "typeorm";
@@ -6,6 +6,7 @@ import { instanceToPlain } from "class-transformer";
 
 @Injectable()
 export class UsersRepository{
+
     constructor(
         @InjectRepository(Users)
         private readonly usersRepository:Repository<Users>
@@ -70,7 +71,10 @@ export class UsersRepository{
     }
     async getUserByEmail(email:string): Promise<Users | null>{
         return await this.usersRepository.findOneBy({email})
-    }    
+    }
+
+
+    
 }
     
 

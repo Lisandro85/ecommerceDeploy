@@ -14,7 +14,11 @@ async function bootstrap() {
   .addBearerAuth()
   .build()
   const document= SwaggerModule.createDocument(app,swaggerConfig)
-  SwaggerModule.setup('api',app,document)
+  SwaggerModule.setup('api',app,document,{
+    swaggerOptions:{
+      tagsSorter:'alpha'
+    }
+  })
   app.use(loggerGblobal)
   app.useGlobalPipes(new ValidationPipe({
     whitelist:true,

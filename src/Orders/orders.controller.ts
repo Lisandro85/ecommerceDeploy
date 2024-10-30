@@ -20,7 +20,7 @@ export class OrdersController{
     @ApiBearerAuth()
     @UseGuards(AuthGuard)
     @Get(':id')
-    getOrder(@Param('id', new ParseUUIDPipe()) id:string){
+    getOrder(@Param('id', ParseUUIDPipe) id:string){
         return this.ordersService.getOrder(id)
     }
 
