@@ -39,9 +39,9 @@ git clone https://github.com/Lisandro85/ecommerceDeploy
 ---
 
 ### 2️⃣ Configura las Variables de Entorno
-Crea un archivo .env en la raíz del proyecto y agrega las siguientes variables de configuración:
 
 ```env
+Crea un archivo .env en la raíz del proyecto y agrega las siguientes variables de configuración:
 DATABASE_HOST=localhost
 DATABASE_PORT=5432
 DATABASE_USER=tu_usuario
