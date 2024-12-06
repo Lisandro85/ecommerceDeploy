@@ -33,9 +33,9 @@ Asegúrate de tener instalados los siguientes programas:
 - [Git](https://git-scm.com/)  
 
 ### 1️⃣ **Clona el Repositorio**
-
+```env
 git clone https://github.com/Lisandro85/ecommerceDeploy
-
+```
 ---
 
 ### 2️⃣ Configura las Variables de Entorno
@@ -52,20 +52,24 @@ PORT=3000
 ```
 
 ### 3️⃣ Inicia el Servidor
+```env
 Arranca el servidor con el siguiente comando:
-
 npm run start
+```
 
 ---
 
 ### 🛠️ Comandos Útiles
+```env
 npm run start Inicia el servidor en modo desarrollo.
 npm run build: Compila el proyecto para producción.
-
+```
 ---
 
 ### 📧 Contacto
+```env
 Para preguntas o sugerencias, puedes contactarme:
 📩 lisandrobedotti@hotmail.com
+```
 
 
