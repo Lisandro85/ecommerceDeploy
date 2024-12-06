@@ -27,22 +27,23 @@
 
 ## 📦 **Cómo Ejecutar el Proyecto**
 
-### 1️⃣ **Pre-requisitos**
 Asegúrate de tener instalados los siguientes programas:  
 - [Node.js](https://nodejs.org/) (v16 o superior)  
 - [PostgreSQL](https://www.postgresql.org/)  
 - [Git](https://git-scm.com/)  
 
-### 2️⃣ **Clona el Repositorio**
-```bash
+### 1️⃣ **Clona el Repositorio**
+
 git clone https://github.com/tu-usuario/ecommerce-backend.git
 cd ecommerce-backend
 
-4️⃣ Configura las Variables de Entorno
-Crea un archivo .env en la raíz del proyecto y configura las siguientes variables:
+---
+
+2️⃣ Configura las Variables de Entorno
+Crea un archivo .env en la raíz del proyecto y agrega las siguientes variables de configuración:
 
 env
-Copiar código
+
 DATABASE_HOST=localhost
 DATABASE_PORT=5432
 DATABASE_USER=tu_usuario
@@ -50,51 +51,30 @@ DATABASE_PASSWORD=tu_contraseña
 DATABASE_NAME=ecommerce
 JWT_SECRET=tu_clave_secreta
 PORT=3000
-5️⃣ Ejecuta las Migraciones
+
+---
+
+3️⃣ Ejecuta las Migraciones
 Configura las tablas en la base de datos ejecutando:
 
-bash
-Copiar código
 npm run typeorm migration:run
-6️⃣ Inicia el Servidor
+
+---
+
+4️⃣ Inicia el Servidor
 Arranca el servidor con el siguiente comando:
 
-bash
-Copiar código
 npm run start:dev
-El servidor estará disponible en: http://localhost:3000.
 
-📂 Estructura del Proyecto
-plaintext
-Copiar código
-src/
-├── auth/          # Módulo de autenticación y manejo de usuarios
-├── products/      # Lógica de negocio para productos
-├── orders/        # Módulo de gestión de pedidos
-├── common/        # Clases y utilidades compartidas
-├── database/      # Configuración de TypeORM y migraciones
-├── main.ts        # Punto de entrada de la aplicación
+---
+
 🛠️ Comandos Útiles
 npm run start:dev: Inicia el servidor en modo desarrollo.
 npm run build: Compila el proyecto para producción.
-npm run test: Ejecuta las pruebas unitarias.
-npm run lint: Analiza el código para asegurar su calidad.
-🌐 Contribuciones
-¡Las contribuciones son bienvenidas! Si tienes ideas para mejorar este proyecto:
 
-Haz un fork del repositorio.
-Crea una rama para tu funcionalidad (git checkout -b nueva-funcionalidad).
-Haz un pull request con tus cambios.
+---
 📧 Contacto
 Para preguntas o sugerencias, puedes contactarme:
 📩 lisandrobedotti@hotmail.com
 
-¡Espero que este proyecto sea útil para tus ideas de ecommerce! 🎉
-
-🏗️ Características Clave:
-Tabla de Tecnologías: Resalta lo que hace que el proyecto sea potente y relevante.
-Instrucciones Claras: Desde instalación hasta ejecución, paso a paso.
-Estructura del Proyecto: Facilita la navegación del código.
-Comandos Útiles: Detalla cómo interactuar con el proyecto.
-Contacto Profesional: Abierto a colaboraciones.
 
