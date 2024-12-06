@@ -34,15 +34,12 @@ Asegúrate de tener instalados los siguientes programas:
 
 ### 1️⃣ **Clona el Repositorio**
 
-git clone https://github.com/tu-usuario/ecommerce-backend.git
-cd ecommerce-backend
+git clone https://github.com/Lisandro85/ecommerceDeploy
 
 ---
 
-2️⃣ Configura las Variables de Entorno
+### 2️⃣ Configura las Variables de Entorno
 Crea un archivo .env en la raíz del proyecto y agrega las siguientes variables de configuración:
-
-env
 
 DATABASE_HOST=localhost
 DATABASE_PORT=5432
@@ -52,28 +49,20 @@ DATABASE_NAME=ecommerce
 JWT_SECRET=tu_clave_secreta
 PORT=3000
 
----
-
-3️⃣ Ejecuta las Migraciones
-Configura las tablas en la base de datos ejecutando:
-
-npm run typeorm migration:run
-
----
-
-4️⃣ Inicia el Servidor
+### 3️⃣ Inicia el Servidor
 Arranca el servidor con el siguiente comando:
 
-npm run start:dev
+npm run start
 
 ---
 
-🛠️ Comandos Útiles
-npm run start:dev: Inicia el servidor en modo desarrollo.
+### 🛠️ Comandos Útiles
+npm run start Inicia el servidor en modo desarrollo.
 npm run build: Compila el proyecto para producción.
 
 ---
-📧 Contacto
+
+### 📧 Contacto
 Para preguntas o sugerencias, puedes contactarme:
 📩 lisandrobedotti@hotmail.com
 
