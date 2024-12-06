@@ -49,6 +49,7 @@ DATABASE_PASSWORD=tu_contraseña
 DATABASE_NAME=ecommerce
 JWT_SECRET=tu_clave_secreta
 PORT=3000
+```
 
 ### 3️⃣ Inicia el Servidor
 Arranca el servidor con el siguiente comando:
